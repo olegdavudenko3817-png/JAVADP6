@@ -1,0 +1,36 @@
+# IntelliJ IDEA
+
+.idea/
+*.iml
+
+# Gradle
+
+.gradle/
+build/
+
+# H2 Database files
+
+*.mv.db
+*.trace.db
+*.lock.db
+
+# Logs
+
+*.log
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Compiled Java files
+
+*.class
+
+# Temporary files
+
+out/
+
+# Local configuration
+
+local.properties
