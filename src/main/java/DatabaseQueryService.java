@@ -12,107 +12,128 @@ public class DatabaseQueryService {
 
     private String readSqlFromFile(String filePath) {
         try {
+
             return Files.readString(Path.of(filePath));
+
         } catch (IOException e) {
-            throw new RuntimeException("Не удалось прочитать SQL файл: " + filePath, e);
+            throw new IllegalStateException("Не удалось прочитать SQL файл: " + filePath, e);
         }
+
     }
 
-    public List<DTO.MaxProjectCountClient> findMaxProjectsClient() {
-        List<DTO.MaxProjectCountClient> result = new ArrayList<>();
+    public List<MaxProjectCountClient> findMaxProjectsClient() {
+        List<MaxProjectCountClient> result = new ArrayList<>();
         String sql = readSqlFromFile("sql/find_max_projects_client.sql");
 
-        Connection connection = Database.getInstance().getConnection();
+        try (Statement statement = Database.getInstance()
+                .getConnection()
+                .createStatement();
 
-        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 int projectCount = resultSet.getInt("project_count");
-                result.add(new DTO.MaxProjectCountClient(name, projectCount));
+                result.add(new MaxProjectCountClient(name, projectCount));
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Database failed", e);
         }
+
         return result;
     }
 
-    public List<DTO.LongestProject> findLongestProject() {
-        List<DTO.LongestProject> result = new ArrayList<>();
+    public List<LongestProject> findLongestProject() {
+        List<LongestProject> result = new ArrayList<>();
         String sql = readSqlFromFile("sql/find_longest_project.sql");
-        Connection connection = Database.getInstance().getConnection();
 
-        try (Statement statement = connection.createStatement();
+        try (Statement statement = Database.getInstance()
+                .getConnection()
+                .createStatement();
+
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 int monthCount = resultSet.getInt("month_count");
-                result.add(new DTO.LongestProject(name, monthCount));
+                result.add(new LongestProject(name, monthCount));
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Database failed", e);
         }
+
         return result;
     }
 
-    public List<DTO.MaxSalaryWorker> findMaxSalaryWorker() {
-        List<DTO.MaxSalaryWorker> result = new ArrayList<>();
+    public List<MaxSalaryWorker> findMaxSalaryWorker() {
+        List<MaxSalaryWorker> result = new ArrayList<>();
         String sql = readSqlFromFile("sql/find_max_salary_worker.sql");
-        Connection connection = Database.getInstance().getConnection();
 
-        try (Statement statement = connection.createStatement();
+        try (Statement statement = Database.getInstance()
+                .getConnection()
+                .createStatement();
+
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 int salary = resultSet.getInt("salary");
-                result.add(new DTO.MaxSalaryWorker(name, salary));
+                result.add(new MaxSalaryWorker(name, salary));
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Database failed", e);
         }
+
         return result;
     }
 
-    public List<DTO.YoungestEldestWorker> findYoungestEldestWorkers() {
-        List<DTO.YoungestEldestWorker> result = new ArrayList<>();
+    public List<YoungestEldestWorker> findYoungestEldestWorkers() {
+        List<YoungestEldestWorker> result = new ArrayList<>();
         String sql = readSqlFromFile("sql/find_youngest_eldest_workers.sql");
-        Connection connection = Database.getInstance().getConnection();
 
-        try (Statement statement = connection.createStatement();
+        try (Statement statement = Database.getInstance()
+                .getConnection()
+                .createStatement();
+
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 String type = resultSet.getString("type");
                 String name = resultSet.getString("name");
                 java.time.LocalDate birthday = resultSet.getDate("birthday").toLocalDate();
-                result.add(new DTO.YoungestEldestWorker(type, name, birthday));
+                result.add(new YoungestEldestWorker(type, name, birthday));
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Database failed", e);
         }
+
         return result;
     }
 
-    public List<DTO.ProjectPrice> printProjectPrices() {
-        List<DTO.ProjectPrice> result = new ArrayList<>();
+    public List<ProjectPrice> printProjectPrices() {
+        List<ProjectPrice> result = new ArrayList<>();
         String sql = readSqlFromFile("sql/print_project_prices.sql");
-        Connection connection = Database.getInstance().getConnection();
 
-        try (Statement statement = connection.createStatement();
+        try (Statement statement = Database.getInstance()
+                .getConnection()
+                .createStatement();
+
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 int price = resultSet.getInt("price");
-                result.add(new DTO.ProjectPrice(name, price));
+                result.add(new ProjectPrice(name, price));
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Database failed", e);
         }
+
         return result;
     }
 }
